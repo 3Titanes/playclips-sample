@@ -110,9 +110,28 @@ class InfluencerComponent extends Component {
         let influencer = this.props.influencer;
         if (!influencer) return null;
 
+        let tags;
+        try {
+            tags = influencer.tags;
+        } catch (e) {
+            return h(
+                'div',
+                {
+                    style: {
+                        height: '100%',
+                        background: 'black',
+                        color: 'red',
+                        textAlign: 'center',
+                        padding: '2em',
+                        fontSize: '150%'
+                    }
+                },
+                'Unable to load influencer data');
+        }
+
         // Defaults to the first tag
         if (!this.state.tag) {
-            this.setState({tag: influencer.tags[0]});
+            this.setState({tag: tags[0]});
         }
 
         return h(
@@ -126,7 +145,7 @@ class InfluencerComponent extends Component {
                     {
                         onChange: (evt) => this.setState({tag: evt.target.value})
                     },
-                    influencer.tags.map(
+                    tags.map(
                         (tag) => h('option', {value: tag}, tag))),
                 h(
                     'button',
